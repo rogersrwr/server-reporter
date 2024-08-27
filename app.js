@@ -1,5 +1,5 @@
 const fs = require('fs');
-const https = require('https');
+//const https = require('https');
 const express = require('express');
 const path = require('path');
 
@@ -11,6 +11,10 @@ app.use(express.json());
 
 //Serve static files from the 'public' directory
 app.use(express.static('public'));
+
+
+//Store data received from POST requests
+let postData = {};
 
 // Route to handle POST requests
 app.post('/your-endpoint', (req, res) => {
@@ -34,22 +38,25 @@ app.post('/your-endpoint', (req, res) => {
 });
 
 // Load your SSL certificates (replace with your actual certificate and key paths)
-const options = {
-    key: fs.readFileSync('./private-key.pem'),
-    cert: fs.readFileSync('./certificate.pem')
-};
+// const options = {
+//     key: fs.readFileSync('./private-key.pem'),
+//     cert: fs.readFileSync('./certificate.pem')
+// };
 
-// Create HTTPS server
-https.createServer(app).listen(PORT, () => {
-    console.log(`HTTPS Server running on port ${PORT}`);
+
+//Route to serve the HTML page dynamically
+app.get('/', (req, res) => {
+    res.render('index', { data: postData });
 });
 
 
 
-// app.get('/', function (req, res) {
-//   res.send('Howdy partner');
+// Create HTTPS server
+// https.createServer(app).listen(PORT, () => {
+//     console.log(`HTTPS Server running on port ${PORT}`);
 // });
 
-// app.listen(443, function () {
-//   console.log('Example app listening on port 3000!');
-// });
+//Create HTTP server
+app.listen(PORT, () => {
+    console.log(`HTTP server running on port ${PORT}`);
+});

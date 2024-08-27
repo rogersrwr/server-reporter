@@ -6,8 +6,27 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
+const dataFilePath = './counters.json';
+
+//load counters from file
+let counters = {};
+if (fs.existsSync(dataFilePath)) {
+    counters = JSON.parse(fs.readFileSync(dataFilePath, 'utf-8'));
+    console.log(counters.counter1);
+} else {
+    counters = { counter1: 0, counter2: 0 };
+}
+
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+
+
+//Route to get current counters
+app.get('/counters', (req, res) => {
+    res.json(counters);
+});
+
 
 //Serve static files from the 'public' directory
 app.use(express.static('public'));
@@ -19,6 +38,7 @@ let postData = {};
 // Route to handle POST requests
 app.post('/your-endpoint', (req, res) => {
     const data = req.body;
+    //const { counter } = req.body;
 
     // Process the received data
     console.log('Data received:', data);
@@ -32,6 +52,56 @@ app.post('/your-endpoint', (req, res) => {
         console.log('Stopping process...');
         // Code to stop a process
     }
+
+    if (data.action == 'addBV') {
+        console.log(' ');
+        console.log(`Previous counter1 value: ${counters.counter1}`);
+        counters.counter1++;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2)); // Save to file
+        //res.json({ success: true, value: counters.counter1 });
+        console.log(`New counter1 value: ${counters.counter1}`);
+    }
+
+    if (data.action == 'addPH') {
+        console.log(' ');
+        console.log(`Previous counter2 value: ${counters.counter2}`);
+        counters.counter2++;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
+        console.log(`New counter2 value: ${counters.counter2}`);
+    }
+
+    if (data.action == 'addVoice') {
+        console.log(' ');
+        console.log(`Previous counter3 value: ${counters.counter3}`);
+        counters.counter3++;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
+        console.log(`New counter3 value: ${counters.counter3}`);
+    }
+
+    if (data.action == 'addServer') {
+        console.log(' ');
+        console.log(`Previous counter4 value: ${counters.counter4}`);
+        counters.counter4++;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
+        console.log(`New counter4 value: ${counters.counter4}`);
+    }
+
+    if (data.action == 'reset') {
+        console.log(' ');
+        console.log('Resetting all counters');
+        counters.counter1 = 0;
+        counters.counter2 = 0;
+        counters.counter3 = 0;
+        counters.counter4 = 0;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
+        console.log(`New counter values: ${counters.counter1}, ${counters.counter2}, ${counters.counter3}, ${counters.counter4}`);
+    }
+
+    if (data.action == 'report') {
+        
+    }
+
+
 
     // Send a response back to the client
     res.status(200).send('Data processed successfully');

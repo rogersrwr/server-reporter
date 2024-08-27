@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = 443;
+const PORT = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());

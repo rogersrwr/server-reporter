@@ -2,6 +2,16 @@ const fs = require('fs');
 //const https = require('https');
 const express = require('express');
 const path = require('path');
+const { App } = require('@slack/bolt');
+
+const app1 = new App({ 
+    token: '',
+    signingSecret: '',
+  });
+  
+//const channelId = 'C06KJ8ML7PA';    //personal
+const channelId = 'C06LGR0MJRW';   
+
 
 const app = express();
 const PORT = 3000;
@@ -98,13 +108,65 @@ app.post('/your-endpoint', (req, res) => {
     }
 
     if (data.action == 'report') {
-        
+
     }
 
 
 
     // Send a response back to the client
     res.status(200).send('Data processed successfully');
+});
+
+
+
+app.post('/view', async (req, res) => {
+    const data = req.body;
+
+    if (data.action == 'show') {
+        await app1.client.chat.postMessage({
+            token: process.env.O_AUTH,
+            channel: channelId,
+            blocks: [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Automations Status Report:*  \n"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `BrightView Regression Test: ${counters.counter1}/2 successful runs past 24 hours`
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `ParentHub Regression Tests: ${counters.counter2}/2 successful runs past 24 hours.`
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `Voice message checker: ${counters.counter3}/46 successful runs past 24 hours`
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `Server status checker: ${280 - counters.counter4} missed checks`
+                    }
+                }
+            ]
+            
+        });
+        res.status(200).send('Data processed successfully');
+    }
 });
 
 // Load your SSL certificates (replace with your actual certificate and key paths)

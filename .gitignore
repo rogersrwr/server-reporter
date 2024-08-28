@@ -1,5 +1,1 @@
-rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' \
--e "ssh -i ~/.ssh/oregon-ryan-desktop.pem" \
-. ubuntu@ec2-44-243-106-99.us-west-2.compute.amazonaws.com:~/app
-
-ssh -i "oregon-ryan-desktop.pem" ubuntu@ec2-44-243-106-99.us-west-2.compute.amazonaws.com
+.env

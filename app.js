@@ -9,8 +9,8 @@ const app1 = new App({
     signingSecret: '',
   });
   
-//const channelId = 'C06KJ8ML7PA';    //personal
-const channelId = 'C06LGR0MJRW';   
+const channelId = 'C06KJ8ML7PA';    //personal
+//const channelId = 'C06LGR0MJRW';   
 
 
 const app = express();

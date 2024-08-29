@@ -11,7 +11,7 @@ const app1 = new App({
   });
   
 const channelId = process.env.CHANNEL;
- 
+
 
 
 const app = express();
@@ -137,34 +137,54 @@ app.post('/view', async (req, res) => {
                     }
                 },
                 {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*For runs that should have occurred within the past 24 hours*"
+                        }
+                    ]
+                },
+                {
                     "type": "divider"
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*BrightView Regression Test:*   ${counters.counter1}/2 successful runs past 24 hours`
+                        "text": `*BrightView Regression Test:*   ${counters.counter1}/2 successful runs`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*ParentHub Regression Tests:*   ${counters.counter2}/2 successful runs past 24 hours.`
+                        "text": `*ParentHub Regression Tests:*   ${counters.counter2}/2 successful runs`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*Voice message checker:*        ${counters.counter3}/46 successful runs past 24 hours`
+                        "text": `*Voice message checker:*        Not online`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*Server status checker:*        ${280 - counters.counter4} missed checks`
+                        "text": `*Server status checker:*          Not online`
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "plain_text",
+                        "text": `:white_check_mark: All expected automation run confirmations have been received.`,
+                        "emoji": true
                     }
                 }
             ]

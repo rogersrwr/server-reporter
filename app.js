@@ -3,14 +3,15 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const { App } = require('@slack/bolt');
+require('dotenv').config();
 
 const app1 = new App({ 
-    token: '',
-    signingSecret: '',
+    token: process.env.BOT_TOKEN,
+    signingSecret: process.env.SIGN_SEC,
   });
   
-const channelId = 'C06KJ8ML7PA';    //personal
-//const channelId = 'C06LGR0MJRW';   
+const channelId = process.env.CHANNEL;
+ 
 
 
 const app = express();
@@ -128,38 +129,42 @@ app.post('/view', async (req, res) => {
             channel: channelId,
             blocks: [
                 {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Automations Status Report",
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Automations Status Report:*  \n"
+                        "text": `*BrightView Regression Test:*   ${counters.counter1}/2 successful runs past 24 hours`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `BrightView Regression Test: ${counters.counter1}/2 successful runs past 24 hours`
+                        "text": `*ParentHub Regression Tests:*   ${counters.counter2}/2 successful runs past 24 hours.`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `ParentHub Regression Tests: ${counters.counter2}/2 successful runs past 24 hours.`
+                        "text": `*Voice message checker:*        ${counters.counter3}/46 successful runs past 24 hours`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `Voice message checker: ${counters.counter3}/46 successful runs past 24 hours`
-                    }
-                },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": `Server status checker: ${280 - counters.counter4} missed checks`
+                        "text": `*Server status checker:*        ${280 - counters.counter4} missed checks`
                     }
                 }
             ]

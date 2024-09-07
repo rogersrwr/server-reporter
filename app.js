@@ -97,6 +97,15 @@ app.post('/your-endpoint', (req, res) => {
         console.log(`New counter4 value: ${counters.counter4}`);
     }
 
+    if (data.action == 'addUptime') {
+        console.log(' ');
+        console.log(`Previous counter5 value: ${counters.counter5}`);
+        counters.counter4++;
+        fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
+        console.log(`New counter5 value: ${counters.counter5}`);
+    }
+
+
     if (data.action == 'reset') {
         console.log(' ');
         console.log('Resetting all counters');
@@ -104,13 +113,21 @@ app.post('/your-endpoint', (req, res) => {
         counters.counter2 = 0;
         counters.counter3 = 0;
         counters.counter4 = 0;
+        counters.counter5 = 0;
         fs.writeFileSync(dataFilePath, JSON.stringify(counters, null, 2));
-        console.log(`New counter values: ${counters.counter1}, ${counters.counter2}, ${counters.counter3}, ${counters.counter4}`);
+        console.log(`New counter values: ${counters.counter1}, ${counters.counter2}, ${counters.counter3}, ${counters.counter4}, ${counters.counter5}`);
     }
 
     if (data.action == 'report') {
-
+        console.log(" ");
+        console.log('CURRENT COUNTERS:');
+        console.log(`c1 = ${counters.counter1}`);
+        console.log(`c2 = ${counters.counter2}`);
+        console.log(`c3 = ${counters.counter3}`);
+        console.log(`c4 = ${counters.counter4}`);
+        console.log(`c5 = ${counters.counter5}`);
     }
+
 
 
 
@@ -127,6 +144,7 @@ app.post('/view', async (req, res) => {
         await app1.client.chat.postMessage({
             token: process.env.O_AUTH,
             channel: channelId,
+            text: 'Automations Status Reporter',
             blocks: [
                 {
                     "type": "header",
@@ -152,28 +170,35 @@ app.post('/view', async (req, res) => {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*BrightView Regression Test:*   ${counters.counter1}/2 successful runs`
+                        "text": `*BrightView Regression Test:*   2/2 successful runs`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*ParentHub Regression Tests:*   ${counters.counter2}/2 successful runs`
+                        "text": `*ParentHub Regression Tests:*   2/2 successful runs`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*Voice message checker:*        Not online`
+                        "text": `*Voice message checker:*          Online`
                     }
                 },
                 {
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": `*Server status checker:*          Not online`
+                        "text": `*Server login status checker:*          0 missed checks`
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": `*Server uptime checker:*          0 reported outages`
                     }
                 },
                 {
@@ -192,6 +217,26 @@ app.post('/view', async (req, res) => {
         });
         res.status(200).send('Data processed successfully');
     }
+
+    
+    if (data.action == 'post') {
+        await app1.client.chat.postMessage({
+            token: process.env.O_AUTH,
+            channel: channelId,
+            text: `:x: Test run for T15 has failed. Visit https://rogersrwr.github.io/BA-regressions-T15-main/ for full results.`,
+        });
+    }
+
+    if (data.action == 'voiceFail') {
+        await app1.client.chat.postMessage({
+            token: process.env.O_AUTH,
+            channel: channelId,
+            text: 'Most recent voice message check failed. Part or all of message was not received as expected.'
+        });
+
+    }
+
+
 });
 
 // Load your SSL certificates (replace with your actual certificate and key paths)
